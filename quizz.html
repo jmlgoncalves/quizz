@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quizz Rute</title>
+  <!-- para ter icone https://www.w3schools.com/html/html_favicon.asp origem do icone https://icons8.com.br/icons/set/question-mark -->
+  <link rel="icon" type="image/x-icon" href="./imagens/icons8-ponto-de-interrogação-78.png">
+  
+  <!-- para ter tamanho correcto no telemovel https://stackoverflow.com/questions/27971231/guidelines-for-resizing-and-adjusting-for-mobile-devices-using-javascript -->
+  <meta name="viewport" content="width=device-width">
+</head>
+<body>
+
+<h1>Quizz!!</h1>
+
+<p>Por favor selecione uma das escolhas:</p>
+
+<img id="imagem" src="./imagens/quizz_cor.png" height="400">  
+
+<p id="texto"></p>	<br>
+
+<input type="radio" id="escolha1" name="escolhas">
+<label id="texto_escolha1"></label><br>
+<input type="radio" id="escolha2" name="escolhas">
+<label id="texto_escolha2"></label><br>
+<input type="radio" id="escolha3" name="escolhas">
+<label id="texto_escolha3"></label><br>
+<input type="radio" id="escolha4" name="escolhas" value="JavaScript">
+<label id="texto_escolha4"></label><br> <br> 
+
+<button type="button" id="bloquear_escolha" onclick="bloquear_escolha()"> Bloquear escolha!</button> <br><br> 
+
+<button type="button" id="pergunta" onclick="pergunta()"> Siga para a proxima pergunta!</button> <br><br> 
+
+
+<img id="estrela1" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30">
+<img id="estrela2" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30">
+<img id="estrela3" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30">
+<img id="estrela4" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30">
+<img id="estrela5" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30">
+<img id="estrela6" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30">
+<img id="estrela7" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30">
+<img id="estrela8" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30">
+<img id="estrela9" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30">
+<img id="estrela10" src="./imagens/icons8-estrela-preenchida-64_cinza.png" height="30"> <br> 
+
+<h2 id="resultado"> </h3>
+
+<hr id = "linha"> <br> 
+<h1 id="resultado_final"> </h1> <br> 
+<button type="button" id="reiniciar" onclick="reiniciar()"> Reiniciar?</button>  <br>
+
+<script>
+
+// os dados das perguntas, o 1º item é a pergunta, 2º item a imagem, 3º ao 6 item são cada uma das opções, a opção correcta é a 1ª, na posicao 3
+var perguntas = [
+    ["Primeira Pergunta : que é?", "./imagens/img_the_scream.jpg", "_Bla_1", "_Bla_2", "_Bla_3", "_Bla_4"],
+    ["Segunda Pergunta : quen é?", "./imagens/quizz.png", "2_Bla_1", "2_Bla_2", "2_Bla_3", "2_Bla_4"],
+    ["3 Pergunta : quen é?", "./imagens/icons8-estrela-preenchida-64.png", "3_Bla_1", "3_Bla_2", "3_Bla_3", "3_Bla_4"],
+    ["4 Pergunta : quen é?", "./imagens/icons8-estrela-preenchida-64_cinza.png", "4_Bla_1", "4_Bla_2", "4_Bla_3", "4_Bla_4"],
+    ["5 Pergunta : quen é?", "./imagens/icons8-estrela-preenchida-64_vermelha.png", "5_Bla_1", "5_Bla_2", "5_Bla_3", "5_Bla_4"],
+    ["6 Pergunta : quen é?", "./imagens/icons8-ponto-de-interrogação-78.png", "6_Bla_1", "6_Bla_2", "6_Bla_3", "6_Bla_4"],
+    ["7 Pergunta : quen é?", "", "7_Bla_1", "7_Bla_2", "7_Bla_3", "7_Bla_4"],
+    ["8 Pergunta : quen é?", "", "8_Bla_1", "8_Bla_2", "8_Bla_3", "8_Bla_4"],
+    ["9 Pergunta : quen é?", "", "9_Bla_1", "9_Bla_2", "9_Bla_3", "9_Bla_4"],
+    ["10 Pergunta : quen é?", "", "10_Bla_1", "10_Bla_2", "10_Bla_3", "10_Bla_4"],
+    ["11 Pergunta : quen é?", "", "11_Bla_1", "11_Bla_2", "11_Bla_3", "11_Bla_4"],
+    ["12 Pergunta : quen é?", "", "12_Bla_1", "12_Bla_2", "12_Bla_3", "12_Bla_4"],
+    ["13 Pergunta : quen é?", "", "13_Bla_1", "13_Bla_2", "13_Bla_3", "13_Bla_4"],
+    ["14 Pergunta : quen é?", "", "14_Bla_1", "14_Bla_2", "14_Bla_3", "14_Bla_4"],
+    ["15 Pergunta : quen é?", "", "15_Bla_1", "15_Bla_2", "15_Bla_3", "15_Bla_4"]
+];
+
+// as posições onde estão guardados os dados nas perguntas https://www.freecodecamp.org/news/javascript-2d-arrays/
+const TEXTO_QUIZZ = 0;
+const IMAGEM = 1;
+const TEXTO_ESCOLHA_1 = 2;
+const TEXTO_ESCOLHA_2 = 3;
+const TEXTO_ESCOLHA_3 = 4;
+const TEXTO_ESCOLHA_4 = 5;
+
+// guarda as perguntas já feitas para não se repetirem
+var perguntas_feitas = [];
+
+var numero_perguntas_feitas = 0;
+var escolha_certa = 0;
+var perguntas_acertadas = 0;
+var perguntas_erradas = 0;
+
+// o maximo de perguntas
+const MAXIMO_PERGUNTAS = 10;
+
+// chamar o jogo
+iniciar();
+
+function iniciar(){
+
+	// começar do zero, colocar todas as estrelas a zero
+	document.getElementById("estrela1").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	document.getElementById("estrela2").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	document.getElementById("estrela3").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	document.getElementById("estrela4").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	document.getElementById("estrela5").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	document.getElementById("estrela6").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	document.getElementById("estrela7").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	document.getElementById("estrela8").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	document.getElementById("estrela9").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	document.getElementById("estrela10").src = "./imagens/icons8-estrela-preenchida-64_cinza.png";
+	
+	// esconder o resultado final
+	document.getElementById("linha").style.display = "none";
+	document.getElementById("resultado_final").innerHTML = "";
+	document.getElementById("reiniciar").style.display = "none";
+	
+	// por variaveis a 0
+	perguntas_feitas = [];
+	numero_perguntas_feitas = 0;
+	escolha_certa = 0;
+	perguntas_acertadas = 0;
+	perguntas_erradas = 0;
+
+	// fazer a primeira pergunta
+	pergunta();	
+}
+
+function pergunta(){	
+
+	// escolher a pergunta da lista de perguntas, vai dar uma pergunta que ainda não saiu
+	var numero_pergunta = escolher_pergunta();
+	
+	limpar();
+
+	document.getElementById("texto").innerHTML = perguntas[numero_pergunta][TEXTO_QUIZZ];
+	
+	var imagem_src = perguntas[numero_pergunta][IMAGEM];
+	if (imagem_src == "") {
+		// se não tiver imagem, por imagem generica
+		imagem_src = "./imagens/quizz_cor.png";
+	}
+	document.getElementById("imagem").src = imagem_src;
+	
+	// misturar as escolhas
+	var escolhas = [1,2,3,4];
+	escolhas = shuffle(escolhas);
+	
+	// o TEXTO_ESCOLHA_1 é o correcto, vai ser colocado no elemento da primeira posição das escolhas misturadas
+	escolha_certa = escolhas[0];
+	document.getElementById("texto_escolha" + escolhas[0]).innerHTML = perguntas[numero_pergunta][TEXTO_ESCOLHA_1];	
+	document.getElementById("texto_escolha" + escolhas[1]).innerHTML = perguntas[numero_pergunta][TEXTO_ESCOLHA_2];
+	document.getElementById("texto_escolha" + escolhas[2]).innerHTML = perguntas[numero_pergunta][TEXTO_ESCOLHA_3];
+	document.getElementById("texto_escolha" + escolhas[3]).innerHTML = perguntas[numero_pergunta][TEXTO_ESCOLHA_4];	
+	
+}
+
+// decidir onde colocar as escolhas usando metodo indicado em
+// https://pt.stackoverflow.com/questions/94646/como-misturar-um-array-em-javascript
+function shuffle(array) {
+  var m = array.length, t, i;
+
+  // While there remain elements to shuffle…
+  while (m) {
+
+    // Pick a remaining element…
+    i = Math.floor(Math.random() * m--);
+
+    // And swap it with the current element.
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  }
+
+  return array;
+}
+
+function limpar(){	
+	// ativar as escolhas e limpar o selecionado
+	document.getElementById("escolha1").disabled = false;
+	document.getElementById("escolha2").disabled = false;
+	document.getElementById("escolha3").disabled = false;
+	document.getElementById("escolha4").disabled = false;
+	document.getElementById("escolha1").checked = false;
+	document.getElementById("escolha2").checked = false;
+	document.getElementById("escolha3").checked = false;
+	document.getElementById("escolha4").checked = false;	
+	
+	// ativar o botão para bloquear a escolha
+	document.getElementById("bloquear_escolha").disabled = false;
+	
+	// esconder o botão que permite ir para a proxima pergunta, vai aparecer quando bloquear a escolha
+	document.getElementById("pergunta").style.display = "none";
+
+	// colocar a cor dos textos normal, sem o certo e o errado
+	document.getElementById("texto_escolha1").style.backgroundColor  = "white";
+	document.getElementById("texto_escolha1").style.color  = "black";	
+	document.getElementById("texto_escolha2").style.backgroundColor  = "white";
+	document.getElementById("texto_escolha2").style.color  = "black";	
+	document.getElementById("texto_escolha3").style.backgroundColor  = "white";
+	document.getElementById("texto_escolha3").style.color  = "black";	
+	document.getElementById("texto_escolha4").style.backgroundColor  = "white";
+	document.getElementById("texto_escolha4").style.color  = "black";	
+
+	document.getElementById("resultado").innerHTML = "";
+}
+
+function escolher_pergunta(){	
+	var pergunta = -1;
+	
+	while (pergunta == -1) {		
+		// dá à sorte um valor de 0 até ao numero total perguntas -1 https://www.w3schools.com/js/js_random.asp
+		pergunta = Math.floor(Math.random() * perguntas.length );
+		if (perguntas_feitas.includes(pergunta)){
+			// já foi colocada esta pergunta, continuar a procurar
+			pergunta = -1;
+		}
+		else {
+			// guardar a pergunta
+			perguntas_feitas.push(pergunta);	
+			numero_perguntas_feitas++;
+			
+			return pergunta;
+		}
+	}
+}
+
+function bloquear_escolha() {
+
+	var escolha = 0;
+	
+	// encontrar a escolha feita pelo utilizador
+	if(document.getElementById("escolha1").checked) {
+		escolha = 1;
+	}
+	else if(document.getElementById("escolha2").checked) {
+		escolha = 2;
+	}
+	else if(document.getElementById("escolha3").checked) {
+		escolha = 3;
+	}
+	else if(document.getElementById("escolha4").checked) {
+		escolha = 4;
+	}
+	else {
+		alert("Escolha uma das hipoteses");
+		return;
+	}
+	
+	// verificar se é a escolha certa
+	if (escolha == escolha_certa){	
+		document.getElementById("resultado").innerHTML = "A escolha está correcta!";
+		document.getElementById("resultado").style.color = "green";
+				
+		document.getElementById("estrela" + numero_perguntas_feitas).src = "./imagens/icons8-estrela-preenchida-64.png";
+		
+		perguntas_acertadas++;
+	}
+	else {	
+		document.getElementById("resultado").innerHTML = "A escolha está errada!";
+		document.getElementById("resultado").style.color = "red";		
+		
+		document.getElementById("estrela" + numero_perguntas_feitas).src = "./imagens/icons8-estrela-preenchida-64_vermelha.png";
+		
+		document.getElementById("texto_escolha" + escolha).style.backgroundColor  = "red";
+		document.getElementById("texto_escolha" + escolha).style.color  = "white";
+		
+		perguntas_erradas++;
+	}
+	
+	// mostrar a escolha certa
+	document.getElementById("texto_escolha" + escolha_certa).style.backgroundColor  = "green";
+	document.getElementById("texto_escolha" + escolha_certa).style.color  = "white";
+	
+	// desabilitar as escolhas
+	document.getElementById("escolha1").disabled = true;
+	document.getElementById("escolha2").disabled = true;
+	document.getElementById("escolha3").disabled = true;
+	document.getElementById("escolha4").disabled = true;
+	document.getElementById("bloquear_escolha").disabled = true;
+	
+	if (numero_perguntas_feitas == MAXIMO_PERGUNTAS){
+		// chegou ao fim, mostrar resultados
+		document.getElementById("linha").style.display = "block";
+		document.getElementById("reiniciar").style.display = "block";
+		
+		if (perguntas_acertadas == MAXIMO_PERGUNTAS){
+			document.getElementById("resultado_final").style.color = "green";
+			document.getElementById("resultado_final").innerHTML = "Acertaste todas as " + perguntas_acertadas + " perguntas!";		
+		}
+		else if (perguntas_erradas == MAXIMO_PERGUNTAS){
+			document.getElementById("resultado_final").style.color = "red";
+			document.getElementById("resultado_final").innerHTML = "Falhaste todas as " + perguntas_erradas + " perguntas!";
+		}
+		else {
+			document.getElementById("resultado_final").style.color  = "black";
+			document.getElementById("resultado_final").innerHTML = "Acertaste " + perguntas_acertadas + " perguntas e falhaste " + perguntas_erradas + "!";
+		}
+	}
+	else {
+		// ainda não chegou ao fim, mostrar o botão que permite seguir para a proxima pergunta
+		document.getElementById("pergunta").style.display = "block";
+	}
+}
+
+function reiniciar(){
+	if (window.confirm("Desja reiniciar o QUIZZ?") == true) {
+		iniciar();
+	}
+}
+
+</script>
+</body>
+</html>
